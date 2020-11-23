@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome Email</title>
+</head>
+<body>
+Welcome, <span th:text="${name}"></span> Join the big family!<hr>
+You basic info is as follow: <hr>
+<table border="1">
+<tr>
+    <td>Name</td>
+    <td th:text="${name}"></td>
+</tr>
+<tr>
+    <td>Position</td>
+    <td th:text="${posName}"></td>
+</tr>
+<tr>
+    <td>Title</td>
+    <td th:text="${joblevelName}"></td>
+</tr>
+<tr>
+    <td>Department</td>
+    <td th:text="${departmentName}"></td>
+</tr>
+</table>
+
+<p>Hope we could grow together<!doctype html></p>
+
+</body>
+</html>
