@@ -62,6 +62,42 @@
   <select id="maxWorkID" resultType="java.lang.Integer">
         select max(workID) from employee
   </select>
+    <resultMap id="EmployeeWithSalary" type="org.javaboy.vhr.model.Employee" extends="BaseResultMap">
+        <association property="salary" javaType="org.javaboy.vhr.model.Salary">
+            <id column="sid" property="id" jdbcType="INTEGER" />
+            <result column="sbasicSalary" property="basicSalary" jdbcType="INTEGER" />
+            <result column="sbonus" property="bonus" jdbcType="INTEGER" />
+            <result column="slunchSalary" property="lunchSalary" jdbcType="INTEGER" />
+            <result column="strafficSalary" property="trafficSalary" jdbcType="INTEGER" />
+            <result column="sallSalary" property="allSalary" jdbcType="INTEGER" />
+            <result column="spensionBase" property="pensionBase" jdbcType="INTEGER" />
+            <result column="spensionPer" property="pensionPer" jdbcType="REAL" />
+            <result column="screateDate" property="createDate" jdbcType="TIMESTAMP" />
+            <result column="smedicalBase" property="medicalBase" jdbcType="INTEGER" />
+            <result column="smedicalPer" property="medicalPer" jdbcType="REAL" />
+            <result column="saccumulationFundBase" property="accumulationFundBase" jdbcType="INTEGER" />
+            <result column="saccumulationFundPer" property="accumulationFundPer" jdbcType="REAL" />
+            <result column="sname" property="name" jdbcType="VARCHAR" />
+        </association>
+        <association property="department" javaType="org.javaboy.vhr.model.Department">
+            <result column="dname" property="name"/>
+        </association>
+    </resultMap>
+    <select id="getEmployeeByPageWithSalary" resultMap="EmployeeWithSalary">
+        SELECT e.*, d.`name` AS dname, s.`id` AS sid, s.`accumulationFundBase` AS saccumulationFundBase,
+        s.`accumulationFundPer` AS saccumulationFundPer, s.`allSalary` AS sallsalary, s.`basicSalary` AS
+        sbasicSalary, s.`bonus` AS sbonus, s.`createDate` AS screateDate, s.`lunchSalary` AS slunchSalary,
+        s.`medicalBase` AS smedicalBase, s.`medicalPer` AS smedicalPer, s.`name` AS sname, s.`pensionBase` AS
+        spensionBase, s.`pensionPer` AS spensionPer, s.`trafficSalary` AS strafficSalary FROM employee e LEFT JOIN
+        empsalary es ON e.`id` = es.`eid` LEFT JOIN salary s ON es.`sid`=s.`id` LEFT JOIN department d ON
+        e.`departmentId`=d.`id` order by e.id
+        <if test="page != null and size != null">
+            limit #{page}, #{size}
+        </if>
+    </select>
+    <insert id="updateEmployeeSalaryById">
+        REPLACE INTO empsalary (eid,sid) VALUES (#{eid},#{sid})
+    </insert>
   <select id="getEmployeeById" resultMap="AllEmployeeInfo">
     SELECT e.*,p.`id` AS pid, p.`name` AS pname, n.`id` AS nid, n.`name` AS nname,
             d.`id` AS did, d.`name` AS dname, j.`id` AS jid, j.`name` AS jname,
@@ -107,6 +143,7 @@
   <select id="getTotal" resultType="java.lang.Long">
     select count(*) from employee e
     <where>
+    <if test="emp != null">
       <if test="emp.name != null and emp.name != ''">
           and e.name like concat('%',#{keyword},'%')
       </if>
@@ -128,7 +165,8 @@
       <if test="emp.departmentId != null">
           and e.departmentId=#{emp.departmentId}
       </if>
-      <if test="beginDateScope != null">
+    </if>
+        <if test="beginDateScope != null">
           and e.beginDate between #{beginDateScope[0]} and #{beginDateScope[1]}
       </if>
     </where>
