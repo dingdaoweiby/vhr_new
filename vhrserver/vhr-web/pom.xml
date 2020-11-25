@@ -8,7 +8,6 @@
         <groupId>org.javaboy</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <groupId>org.javaboy</groupId>
     <artifactId>vhr-web</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>vhr-web</name>

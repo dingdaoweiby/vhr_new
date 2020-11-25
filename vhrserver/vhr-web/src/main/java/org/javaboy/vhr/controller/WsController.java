@@ -7,10 +7,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-import java.security.Principal;
 import java.util.Date;
 
 @Controller
@@ -25,6 +22,6 @@ public class WsController {
         chatMsg.setFrom(hr.getUsername());
         chatMsg.setFromNickName(hr.getName());
         chatMsg.setDate(new Date());
-        simpMessagingTemplate.convertAndSendToUser(chatMsg.getTo(),"/queue/chat",chatMsg);
+        simpMessagingTemplate.convertAndSendToUser(chatMsg.getTo(), "/queue/chat", chatMsg);
     }
 }
